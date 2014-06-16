@@ -1,6 +1,6 @@
 # Resources
 resources/
-
+build/
 ##
 # Compiled Object files
 *.slo
