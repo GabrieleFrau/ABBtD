@@ -21,11 +21,11 @@ private:
     void ResourceLoad();
     void PopulateMap();
     sf::RenderWindow w_Window;
-	sf::Font f_Font;
+    sf::Font f_Font;
     My::ResourceHandler m_Resource;
     My::Form m_Form;
     My::Player m_Player;
-	sf::Time m_DeltaTime;
+    sf::Time m_DeltaTime;
     My::InputHandler m_Input;
 };
 #endif // GAME_HPP
