@@ -13,7 +13,7 @@ Game::~Game()
 }
 int Game::Run()
 {
-    if(true)//m_Form.Run())
+    if(m_Form.Run())
     {
         w_Window.create(sf::VideoMode(800,600), "Another byte bites dust - GAME", sf::Style::Titlebar);
         m_Input.LoadBindings();
@@ -46,7 +46,6 @@ int Game::Run()
         m_Player.SetOtherPlayer(&dummy);
         dummy.SetOtherPlayer(&m_Player);
         unsigned int fps = 0;
-        bool debug = false;
 
 
         sf::Clock fpsClock;
@@ -58,19 +57,22 @@ int Game::Run()
             m_Input.UpdateAndInvoke();
             m_Player.UpdateAndAnimate(m_DeltaTime);
             dummy.UpdateAndAnimate(m_DeltaTime);
+#ifdef DEBUG
             std::string acc(std::to_string(m_Player.GetAccel().y));
             std::string vel(std::to_string(m_Player.GetVelocity().y));
-            std::string air(std::to_string(m_Player.IsInAir()));
-            physxText.setString("Base Acceleration(px/s): " + acc + "\nAcceleration(px/s): " + vel + "\nIn air: " + air);
+            std::string del(std::to_string(m_DeltaTime.asSeconds()));
+#endif
+            physxText.setString("Base Acceleration(px/s): " + acc + "\nAcceleration(px/s): " + vel + "\nDelta time: " + del);
             w_Window.clear(sf::Color::Blue);
-            if(debug)
+            w_Window.draw(background);
+            w_Window.draw(rect);
+#ifdef DEBUG
             {
                 w_Window.draw(menuText);
                 w_Window.draw(fpsText);
                 w_Window.draw(physxText);
             }
-            w_Window.draw(background);
-            w_Window.draw(rect);
+#endif
             w_Window.draw(m_Player);
             w_Window.draw(dummy);
             w_Window.display();

@@ -1,4 +1,4 @@
- cmake_minimum_required (VERSION 2.8.10)
+cmake_minimum_required (VERSION 2.8.10)
 project(ABBtD CXX C)
 
 #DEPENDENCIES
@@ -46,6 +46,7 @@ set(SOURCES
 	${PROJECT_SOURCE_DIR}/src/ResourceHandler.cpp
 	${PROJECT_SOURCE_DIR}/src/Player.cpp
 	${PROJECT_SOURCE_DIR}/src/InputHandler.cpp
+	${PROJECT_SOURCE_DIR}/src/Physics.cpp
 )
 set(HEADERS 
 	${PROJECT_SOURCE_DIR}/include/Game.hpp
@@ -54,6 +55,7 @@ set(HEADERS
 	${PROJECT_SOURCE_DIR}/include/ResourceHandler.hpp
 	${PROJECT_SOURCE_DIR}/include/Player.hpp
 	${PROJECT_SOURCE_DIR}/include/InputHandler.hpp
+	${PROJECT_SOURCE_DIR}/include/Physics.hpp
 )
 
 #message(STATUS "TGUI_INCLUDE_DIR ${TGUI_INCLUDE_DIR}")
@@ -66,6 +68,7 @@ else()
 endif(NOT MSVC)
 
 set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "build type")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG") #allows text on screen
 if(NOT MSVC)
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pg") #allows profiling
 endif()

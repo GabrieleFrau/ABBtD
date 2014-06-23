@@ -4,10 +4,7 @@ Player::Player(ResourceHandler& res)
     : sf::Sprite(*res.GetTextures(), sf::IntRect(56, 132, 52, 96))
     , p_Other(nullptr)
     , b_Attack(*res.GetAttack())
-    , m_Floor(0)
-    , m_Acceleration(0, 1600.f) //weigth
-    , m_Velocity(0, 0)
-    , m_InAir(false)
+    , m_Physics(sf::Vector2f(0,0),sf::Vector2f(0,1600.f),0)
 {
 
 }
@@ -24,8 +21,8 @@ void Player::SetOtherPlayer(Player* player)
 }
 void Player::Init(float x = 0, float y = 0, unsigned int floor = 0)
 {
-    m_Floor = floor;
-    this->setPosition(x,y);
+    m_Physics.SetFloor(floor);
+    setPosition(x,y);
     a_WalkPointingLeft.addFrame(1.f, rectL_IDLE);
     a_WalkPointingLeft.addFrame(1.f, rectL_WALK1);
     a_WalkPointingLeft.addFrame(1.f, rectL_WALK2);
@@ -62,19 +59,12 @@ void Player::UpdateAndAnimate(sf::Time& delta)
 {
     m_Animator.update(delta);
     m_Animator.animate(*this);
-    if (getPosition().y + getTextureRect().height < m_Floor || m_InAir)
+    sf::Vector2f pos = m_Physics.NextPosition(getPosition(), delta);
+    move(0, pos.y - getPosition().y);
+    if(!m_Physics.InAir(getPosition().y + getTextureRect().height))
     {
-        m_InAir = true;
-        sf::Vector2f pos(0.f, getPosition().y);
-        pos.y += m_Velocity.y * delta.asSeconds();
-        m_Velocity.y += m_Acceleration.y * delta.asSeconds();
-        Player::move(0, pos.y - getPosition().y);
-        if (getPosition().y + getTextureRect().height > m_Floor)
-        {
-            Player::setPosition(getPosition().x, static_cast<float>(m_Floor) - getTextureRect().height);
-            m_Velocity.y = 0;
-            m_InAir = false;
-        }
+        setPosition(getPosition().x, static_cast<float>(m_Physics.GetFloor() - getTextureRect().height));
+        m_Physics.ResetVelocity();
     }
 }
 void Player::Idle()
@@ -127,16 +117,14 @@ void Player::Punch()
     else
     {
         //if (!m_Animator.isPlayingAnimation())
-            m_Animator.playAnimation("punchL");
+        m_Animator.playAnimation("punchL");
     }
     s_Attack.play();
 }
 void Player::StartJump()
 {
-    //sf::err() << "JUMP!\n";
-    if(!m_InAir)
-        m_Velocity.y -= 700.f;
-    m_InAir = true;
+    if(!m_Physics.InAir(getPosition().y + getTextureRect().height))
+        m_Physics.Impulse(sf::Vector2f(0,700));
 }
 sf::Vector2f Player::GetOtherPlayerPosition()
 {
@@ -145,13 +133,9 @@ sf::Vector2f Player::GetOtherPlayerPosition()
 }
 sf::Vector2f Player::GetAccel()
 {
-    return m_Acceleration;
+    return m_Physics.GetAccel();
 }
 sf::Vector2f Player::GetVelocity()
 {
-    return m_Velocity;
-}
-bool Player::IsInAir()
-{
-    return m_InAir;
+    return m_Physics.GetVelocity();
 }

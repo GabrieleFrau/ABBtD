@@ -7,6 +7,7 @@
 #include <Resources.h>
 #include <ResourceHandler.hpp>
 #include <complex>
+#include <Physics.hpp>
 namespace My
 {
 const sf::IntRect rectL_IDLE(0,662,50,94);
@@ -34,7 +35,6 @@ public:
     void UpdateAndAnimate(sf::Time& delta);
     sf::Vector2f GetVelocity();
     sf::Vector2f GetAccel();
-    bool IsInAir();
 private:
     void go(float x, float y);
     sf::Vector2f GetOtherPlayerPosition();
@@ -49,10 +49,7 @@ private:
     sf::Sound s_Attack;
     sf::SoundBuffer b_Attack;
     Animator m_Animator;
-    unsigned int m_Floor;
-    sf::Vector2f m_Acceleration;
-    sf::Vector2f m_Velocity;
-    bool m_InAir;
+    My::Physics m_Physics;
 };
 }
 #endif // PLAYER_HPP
