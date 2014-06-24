@@ -24,7 +24,7 @@ private:
     sf::Font f_Font;
     My::ResourceHandler m_Resource;
     My::Form m_Form;
-    My::Player m_Player;
+    My::Player m_Player1,m_Player2;
     sf::Time m_DeltaTime;
     My::InputHandler m_Input;
 };

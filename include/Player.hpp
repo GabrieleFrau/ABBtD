@@ -34,6 +34,7 @@ public:
     void Punch();
     void StartJump();
     void UpdateAndAnimate(sf::Time& delta);
+    bool HasLost();
     void HitUpperBody();
     void HitMidBody();
     void HitLowerBody();

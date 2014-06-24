@@ -23,6 +23,7 @@ void Player::Init(sf::Vector2f position = sf::Vector2f(0.f,0.f), unsigned int fl
 void Player::SetOtherPlayer(Player* player)
 {
     p_Other = player;
+    //sf::err() << p_Other << " " << player << "\n";
 }
 void Player::Init(float x = 0, float y = 0, unsigned int floor = 0)
 {
@@ -83,9 +84,16 @@ void Player::UpdateAndAnimate(sf::Time& delta)
     assert(p_Other != nullptr);
     if(IsPunching())
     {
-        if(Arm.getGlobalBounds().intersects(p_Other->getGlobalBounds()) && !punched)
+        sf::FloatRect ArmBounds = Arm.getGlobalBounds();
+        sf::FloatRect OtherPBounds = p_Other->getGlobalBounds();
+        if(ArmBounds.intersects(OtherPBounds) && !punched)
         {
-            HitUpperBody();
+            if(ArmBounds.intersects(sf::FloatRect(OtherPBounds.left, OtherPBounds.top, OtherPBounds.width, (OtherPBounds.height/3) * 1)))
+                HitUpperBody();
+            else if(ArmBounds.intersects(sf::FloatRect(OtherPBounds.left, OtherPBounds.top, OtherPBounds.width, (OtherPBounds.height/3) * 2)))
+                HitMidBody();
+                else if(ArmBounds.intersects(sf::FloatRect(OtherPBounds.left, OtherPBounds.top, OtherPBounds.width, (OtherPBounds.height/3) * 3)))
+                    HitLowerBody();
             sf::err()<<"Other player hit\n";
         }
     }
@@ -93,6 +101,11 @@ void Player::UpdateAndAnimate(sf::Time& delta)
         punched = false;
     s_Attack.setPosition(getPosition().x, getPosition().y, 0.f);
     s_Jump.setPosition(getPosition().x, getPosition().y, 0.f);
+}
+bool Player::HasLost()
+{
+    assert(p_Other != nullptr);
+    return ((HP <= 0) && (p_Other->HP > 0));
 }
 void Player::Idle()
 {
@@ -110,9 +123,10 @@ void Player::Idle()
 }
 void Player::hit(int damage)
 {
-    HP -= damage;
-    sf::Vector2f newsize(HPbar.getSize().x - (damage * 2), HPbar.getSize().y);
-    HPbar.setSize(newsize);
+    assert(p_Other != nullptr);
+    p_Other->HP -= damage;
+    sf::Vector2f newsize(p_Other->HPbar.getSize().x - (damage * 2), p_Other->HPbar.getSize().y);
+    p_Other->HPbar.setSize(newsize);
     punched = true;
 }
 void Player::HitUpperBody()

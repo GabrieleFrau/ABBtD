@@ -2,8 +2,9 @@
 Game::Game()
     : w_Window(sf::VideoMode(800,600), "Another byte bites dust - MENU", sf::Style::Default)
     , m_Form(w_Window)
-    , m_Player(m_Resource)
-    , m_Input(w_Window, m_Player, m_DeltaTime)
+    , m_Player1(m_Resource)
+    , m_Player2(m_Resource)
+    , m_Input(w_Window, m_Player1, m_Player2, m_DeltaTime)
 {
     f_Font.loadFromFile(RESOURCE_FONT_PATH);
     m_Resource.Load();
@@ -28,7 +29,9 @@ int Game::Run()
         sf::Text physxText;
         physxText.setPosition(fpsText.getPosition().x, fpsText.getPosition().y + fpsText.getCharacterSize() * 1.5f);
         physxText.setFont(f_Font);
-
+        sf::Text winnerText;
+        winnerText.setFont(f_Font);
+        winnerText.setCharacterSize(42U);
         sf::Vector2f rectSize(static_cast<float>(w_Window.getSize().x), static_cast<float>(w_Window.getSize().y / 3));
         sf::RectangleShape rect(rectSize);
         sf::Texture texMonitor;
@@ -40,18 +43,19 @@ int Game::Run()
         texBackground.loadFromFile(RESOURCE_BACKGROUND);
         background.setTexture(texBackground);
 
-        m_Player.Init(static_cast<float>(w_Window.getSize().x / 2 - 200), 0.f, rect.getPosition().y);
-        My::Player dummy(m_Resource);
-        dummy.Init(static_cast<float>(w_Window.getSize().x / 2 + 200), 0.f, rect.getPosition().y);
-        m_Player.SetOtherPlayer(&dummy);
-        dummy.SetOtherPlayer(&m_Player);
-        m_Player.HPbar.setFillColor(sf::Color::Green);
-        m_Player.HPbar.setPosition(100,20);
-        dummy.HPbar.setFillColor(sf::Color::Green);
-        dummy.HPbar.setPosition(w_Window.getSize().x - 210, 20);
+        m_Player1.Init(static_cast<float>(w_Window.getSize().x / 2 - 200), 0.f, rect.getPosition().y);
+        m_Player2.Init(static_cast<float>(w_Window.getSize().x / 2 + 200), 0.f, rect.getPosition().y);
+        m_Player1.SetOtherPlayer(&m_Player2);
+        m_Player2.SetOtherPlayer(&m_Player1);
+        m_Player1.HPbar.setFillColor(sf::Color::Green);
+        m_Player1.HPbar.setPosition(100,20);
+        m_Player2.HPbar.setFillColor(sf::Color::Green);
+        m_Player2.HPbar.setPosition(w_Window.getSize().x - 210, 20);
         unsigned int fps = 0;
-
-
+        bool p1Lost = false;
+        bool p2Lost = false;
+        bool finished = false;
+        sf::Clock winClock;
         sf::Clock fpsClock;
         sf::Clock clock;
 
@@ -59,11 +63,11 @@ int Game::Run()
         {
             m_DeltaTime = clock.restart();
             m_Input.UpdateAndInvoke();
-            m_Player.UpdateAndAnimate(m_DeltaTime);
-            dummy.UpdateAndAnimate(m_DeltaTime);
+            m_Player1.UpdateAndAnimate(m_DeltaTime);
+            m_Player2.UpdateAndAnimate(m_DeltaTime);
 #ifdef DEBUG
-            std::string acc(std::to_string(m_Player.GetAccel().y));
-            std::string vel(std::to_string(m_Player.GetVelocity().y));
+            std::string acc(std::to_string(m_Player1.GetAccel().y));
+            std::string vel(std::to_string(m_Player1.GetVelocity().y));
             std::string del(std::to_string(m_DeltaTime.asSeconds()));
             physxText.setString("Base Acceleration(px/s): " + acc + "\nAcceleration(px/s): " + vel + "\nDelta time: " + del);
 #endif
@@ -77,14 +81,26 @@ int Game::Run()
                 w_Window.draw(physxText);
             }
 #endif
-            w_Window.draw(m_Player.HPbar);
-            w_Window.draw(dummy.HPbar);
-            w_Window.draw(m_Player);
-            if(m_Player.IsPunching())
-                w_Window.draw(m_Player.Arm);
-            if(dummy.IsPunching())
-                w_Window.draw(dummy.Arm);
-            w_Window.draw(dummy);
+            w_Window.draw(m_Player1.HPbar);
+            w_Window.draw(m_Player2.HPbar);
+            p1Lost = m_Player1.HasLost();
+            p2Lost = m_Player2.HasLost();
+            if(!finished && (p1Lost || p2Lost))
+            {
+                finished = true;
+                winnerText.setString(std::string((p1Lost)?("Player 2"):(p2Lost)?("Player1"):("")) + " Won!");
+                winnerText.setPosition(w_Window.getSize().x/2 - (winnerText.getGlobalBounds().width/2),w_Window.getSize().y/3);
+                winClock.restart();
+                m_Input.RemoveBindings();
+            }
+            w_Window.draw(winnerText);
+            w_Window.draw(m_Player1);
+            w_Window.draw(m_Player2);
+            if(m_Player1.IsPunching())
+                w_Window.draw(m_Player1.Arm);
+            if(m_Player2.IsPunching())
+                w_Window.draw(m_Player2.Arm);
+
             w_Window.display();
             ++fps;
             if (fpsClock.getElapsedTime().asMilliseconds() >= 1000)
@@ -93,6 +109,13 @@ int Game::Run()
                 fpsText.setString(std::to_string(fps));
                 fps = 0;
                 fpsClock.restart();
+            }
+            if(finished)
+            {
+                sf::Time t = winClock.getElapsedTime();
+                //sf::err() << t.asSeconds() << "\n";
+                if(t.asSeconds() >= 3.f)
+                    w_Window.close();
             }
         }
     }
