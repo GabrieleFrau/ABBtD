@@ -45,8 +45,8 @@ int Game::Run()
 
         m_Player1.Init(static_cast<float>(w_Window.getSize().x / 2 - 200), 0.f, rect.getPosition().y);
         m_Player2.Init(static_cast<float>(w_Window.getSize().x / 2 + 200), 0.f, rect.getPosition().y);
-        m_Player1.SetOtherPlayer(&m_Player2);
-        m_Player2.SetOtherPlayer(&m_Player1);
+        m_Player1.SetOtherPlayer(m_Player2);
+        m_Player2.SetOtherPlayer(m_Player1);
         m_Player1.HPbar.setFillColor(sf::Color::Green);
         m_Player1.HPbar.setPosition(100,20);
         m_Player2.HPbar.setFillColor(sf::Color::Green);
@@ -58,9 +58,9 @@ int Game::Run()
         sf::Clock winClock;
         sf::Clock fpsClock;
         sf::Clock clock;
-
         while (w_Window.isOpen())
         {
+            //std::clog<<m_Player1.GetPointer()<<" "<<m_Player2.GetPointer()<<std::endl;
             m_DeltaTime = clock.restart();
             m_Input.UpdateAndInvoke();
             m_Player1.UpdateAndAnimate(m_DeltaTime);

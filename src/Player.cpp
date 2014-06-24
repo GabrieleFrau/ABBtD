@@ -1,4 +1,5 @@
 #include "Player.hpp"
+#include <iostream>
 using namespace My;
 Player::Player(ResourceHandler& res)
     : sf::Sprite(*res.GetTextures(), sf::IntRect(56, 132, 52, 96))
@@ -20,10 +21,9 @@ void Player::Init(sf::Vector2f position = sf::Vector2f(0.f,0.f), unsigned int fl
 {
     Player::Init(position.x, position.y, floor);
 }
-void Player::SetOtherPlayer(Player* player)
+void Player::SetOtherPlayer(Player& player)
 {
-    p_Other = player;
-    //sf::err() << p_Other << " " << player << "\n";
+    p_Other = &player;
 }
 void Player::Init(float x = 0, float y = 0, unsigned int floor = 0)
 {
@@ -94,13 +94,17 @@ void Player::UpdateAndAnimate(sf::Time& delta)
                 HitMidBody();
                 else if(ArmBounds.intersects(sf::FloatRect(OtherPBounds.left, OtherPBounds.top, OtherPBounds.width, (OtherPBounds.height/3) * 3)))
                     HitLowerBody();
-            sf::err()<<"Other player hit\n";
+            //sf::err()<<"Other player hit\n";
         }
     }
     else
         punched = false;
     s_Attack.setPosition(getPosition().x, getPosition().y, 0.f);
     s_Jump.setPosition(getPosition().x, getPosition().y, 0.f);
+}
+Player* Player::GetPointer()
+{
+    return p_Other;
 }
 bool Player::HasLost()
 {
@@ -198,6 +202,7 @@ void Player::StartJump()
 }
 sf::Vector2f Player::GetOtherPlayerPosition()
 {
+    std::clog<<this<<" "<<p_Other<<std::endl;
     assert(p_Other != nullptr);
     return p_Other->getPosition();
 }

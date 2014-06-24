@@ -24,7 +24,7 @@ class Player : public sf::Sprite
 public:
     Player(ResourceHandler& resourceHandler);
     ~Player();
-    void SetOtherPlayer(Player* player);
+    void SetOtherPlayer(Player& player);
     void Init(sf::Vector2f position, unsigned int floor);
     void Init(float x, float y, unsigned int floor);
     void Idle();
@@ -33,6 +33,7 @@ public:
     bool IsPunching();
     void Punch();
     void StartJump();
+    Player* GetPointer();
     void UpdateAndAnimate(sf::Time& delta);
     bool HasLost();
     void HitUpperBody();
