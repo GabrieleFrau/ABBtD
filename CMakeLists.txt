@@ -47,6 +47,7 @@ set(SOURCES
 	${PROJECT_SOURCE_DIR}/src/Player.cpp
 	${PROJECT_SOURCE_DIR}/src/InputHandler.cpp
 	${PROJECT_SOURCE_DIR}/src/Physics.cpp
+	${PROJECT_SOURCE_DIR}/src/Collision.cpp
 )
 set(HEADERS 
 	${PROJECT_SOURCE_DIR}/include/Game.hpp
@@ -56,6 +57,7 @@ set(HEADERS
 	${PROJECT_SOURCE_DIR}/include/Player.hpp
 	${PROJECT_SOURCE_DIR}/include/InputHandler.hpp
 	${PROJECT_SOURCE_DIR}/include/Physics.hpp
+	${PROJECT_SOURCE_DIR}/include/Collision.hpp
 )
 
 #message(STATUS "TGUI_INCLUDE_DIR ${TGUI_INCLUDE_DIR}")

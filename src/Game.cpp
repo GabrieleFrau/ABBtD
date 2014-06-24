@@ -18,8 +18,8 @@ int Game::Run()
         w_Window.create(sf::VideoMode(800,600), "Another byte bites dust - GAME", sf::Style::Titlebar);
         m_Input.LoadBindings();
         w_Window.setKeyRepeatEnabled(false);
-        sf::Listener::setPosition(static_cast<float>(w_Window.getSize().x / 2), 0.f, 0);
-        sf::Listener::setDirection(0, 0, 0);
+        sf::Listener::setPosition(static_cast<float>(w_Window.getSize().x / 2), 0.f, 100.f);
+        sf::Listener::setDirection(0, 0, -100.f);
         sf::Listener::setGlobalVolume(100);
         sf::Text menuText("F1: VSYNC ON\tF2: VSYNC OFF\t F3: FPS to 30\tF4: FPS to 60\tF5: unlimited FPS", f_Font, 10);
         sf::Text fpsText;
@@ -45,6 +45,10 @@ int Game::Run()
         dummy.Init(static_cast<float>(w_Window.getSize().x / 2 + 200), 0.f, rect.getPosition().y);
         m_Player.SetOtherPlayer(&dummy);
         dummy.SetOtherPlayer(&m_Player);
+        m_Player.HPbar.setFillColor(sf::Color::Green);
+        m_Player.HPbar.setPosition(100,20);
+        dummy.HPbar.setFillColor(sf::Color::Green);
+        dummy.HPbar.setPosition(w_Window.getSize().x - 210, 20);
         unsigned int fps = 0;
 
 
@@ -61,8 +65,8 @@ int Game::Run()
             std::string acc(std::to_string(m_Player.GetAccel().y));
             std::string vel(std::to_string(m_Player.GetVelocity().y));
             std::string del(std::to_string(m_DeltaTime.asSeconds()));
-#endif
             physxText.setString("Base Acceleration(px/s): " + acc + "\nAcceleration(px/s): " + vel + "\nDelta time: " + del);
+#endif
             w_Window.clear(sf::Color::Blue);
             w_Window.draw(background);
             w_Window.draw(rect);
@@ -73,7 +77,13 @@ int Game::Run()
                 w_Window.draw(physxText);
             }
 #endif
+            w_Window.draw(m_Player.HPbar);
+            w_Window.draw(dummy.HPbar);
             w_Window.draw(m_Player);
+            if(m_Player.IsPunching())
+                w_Window.draw(m_Player.Arm);
+            if(dummy.IsPunching())
+                w_Window.draw(dummy.Arm);
             w_Window.draw(dummy);
             w_Window.display();
             ++fps;

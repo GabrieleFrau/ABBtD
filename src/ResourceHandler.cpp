@@ -3,6 +3,7 @@ using namespace My;
 ResourceHandler::ResourceHandler()
     : k_Textures(thor::Resources::fromFile<sf::Texture>(RESOURCE_TEXTURES_PATH))
     , k_Attack(thor::Resources::fromFile<sf::SoundBuffer>(RESOURCE_ATTACK))
+    , k_Jump(thor::Resources::fromFile<sf::SoundBuffer>(RESOURCE_JUMP))
 {
 }
 ResourceHandler::~ResourceHandler()
@@ -20,4 +21,8 @@ std::shared_ptr<sf::Texture> ResourceHandler::GetTextures()
 std::shared_ptr<sf::SoundBuffer> ResourceHandler::GetAttack()
 {
     return c_SoundBuffer.acquire(k_Attack);
+}
+std::shared_ptr<sf::SoundBuffer> ResourceHandler::GetJump()
+{
+    return c_SoundBuffer.acquire(k_Jump);
 }

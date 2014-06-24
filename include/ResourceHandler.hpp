@@ -14,12 +14,14 @@ public:
     virtual ~ResourceHandler();
     std::shared_ptr<sf::Texture> GetTextures();
     std::shared_ptr<sf::SoundBuffer> GetAttack();
+    std::shared_ptr<sf::SoundBuffer> GetJump();
 protected:
 private:
     thor::ResourceCache<sf::Texture> c_Textures;
     thor::ResourceCache<sf::SoundBuffer> c_SoundBuffer;
     thor::ResourceKey<sf::Texture> k_Textures;
     thor::ResourceKey<sf::SoundBuffer> k_Attack;
+    thor::ResourceKey<sf::SoundBuffer> k_Jump;
 };
 }
 #endif

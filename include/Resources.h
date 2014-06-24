@@ -3,6 +3,7 @@
 #define RESOURCE_DIR "/home/strelok/ABBtD/resources"
 #define RESOURCE_MAINTHEME "/home/strelok/ABBtD/resources/audio/MainTheme.ogg"
 #define RESOURCE_ATTACK "/home/strelok/ABBtD/resources/audio/Attack.ogg"
+#define RESOURCE_JUMP "/home/strelok/ABBtD/resources/audio/Jump.ogg"
 #define RESOURCE_BACKGROUND "/home/strelok/ABBtD/resources/background/back.png"
 #define RESOURCE_MONITOR "/home/strelok/ABBtD/resources/background/monitor.png"
 #define RESOURCE_BACKGROUND_FRAME_1 "/home/strelok/ABBtD/resources/menu/matrix1.png"

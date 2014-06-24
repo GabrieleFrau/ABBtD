@@ -3,6 +3,7 @@
 #define RESOURCE_DIR "@RESOURCE_DIR@"
 #define RESOURCE_MAINTHEME "@RESOURCE_DIR@/audio/MainTheme.ogg"
 #define RESOURCE_ATTACK "@RESOURCE_DIR@/audio/Attack.ogg"
+#define RESOURCE_JUMP "@RESOURCE_DIR@/audio/Jump.ogg"
 #define RESOURCE_BACKGROUND "@RESOURCE_DIR@/background/back.png"
 #define RESOURCE_MONITOR "@RESOURCE_DIR@/background/monitor.png"
 #define RESOURCE_BACKGROUND_FRAME_1 "@RESOURCE_DIR@/menu/matrix1.png"

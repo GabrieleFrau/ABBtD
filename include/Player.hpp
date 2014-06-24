@@ -30,13 +30,22 @@ public:
     void Idle();
     void GoRight(sf::Time& delta);
     void GoLeft(sf::Time& delta);
+    bool IsPunching();
     void Punch();
     void StartJump();
     void UpdateAndAnimate(sf::Time& delta);
+    void HitUpperBody();
+    void HitMidBody();
+    void HitLowerBody();
     sf::Vector2f GetVelocity();
     sf::Vector2f GetAccel();
+    sf::RectangleShape Arm;
+    sf::RectangleShape HPbar;
 private:
     void go(float x, float y);
+    void hit(int damage);
+    int HP;
+    bool punched;
     sf::Vector2f GetOtherPlayerPosition();
     Player* p_Other;
     thor::FrameAnimation a_WalkPointingLeft;
@@ -47,9 +56,12 @@ private:
     thor::FrameAnimation a_IdleLeft;
     thor::FrameAnimation a_Jump;
     sf::Sound s_Attack;
+    sf::Sound s_Jump;
     sf::SoundBuffer b_Attack;
+    sf::SoundBuffer b_Jump;
     Animator m_Animator;
     My::Physics m_Physics;
+
 };
 }
 #endif // PLAYER_HPP
