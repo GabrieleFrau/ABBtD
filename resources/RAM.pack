@@ -1,0 +1,40 @@
+
+RAM.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+ramPunch2
+  rotate: false
+  xy: 0, 0
+  size: 78, 94
+  orig: 128, 128
+  offset: 36, 17
+  index: -1
+ramWalk1
+  rotate: false
+  xy: 80, 0
+  size: 77, 94
+  orig: 128, 128
+  offset: 36, 17
+  index: -1
+ramWalk2
+  rotate: false
+  xy: 159, 0
+  size: 77, 94
+  orig: 128, 128
+  offset: 36, 17
+  index: -1
+ramPunch1
+  rotate: false
+  xy: 238, 0
+  size: 64, 94
+  orig: 128, 128
+  offset: 36, 17
+  index: -1
+ramIdle1
+  rotate: false
+  xy: 304, 0
+  size: 50, 94
+  orig: 128, 128
+  offset: 36, 17
+  index: -1

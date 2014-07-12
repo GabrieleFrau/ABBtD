@@ -7,7 +7,6 @@ Player::Player(ResourceHandler& res)
     , HPbar(sf::Vector2f(200,20))
     , HP(100)
     , punched(false)
-    , p_Other(nullptr)
     , b_Attack(*res.GetAttack())
     , b_Jump(*res.GetJump())
     , m_Physics(sf::Vector2f(0,0),sf::Vector2f(0,1600.f),0)
@@ -23,7 +22,7 @@ void Player::Init(sf::Vector2f position = sf::Vector2f(0.f,0.f), unsigned int fl
 }
 void Player::SetOtherPlayer(Player& player)
 {
-    p_Other = &player;
+    p_Other = std::make_shared<Player>(player);
 }
 void Player::Init(float x = 0, float y = 0, unsigned int floor = 0)
 {
@@ -102,13 +101,8 @@ void Player::UpdateAndAnimate(sf::Time& delta)
     s_Attack.setPosition(getPosition().x, getPosition().y, 0.f);
     s_Jump.setPosition(getPosition().x, getPosition().y, 0.f);
 }
-Player* Player::GetPointer()
-{
-    return p_Other;
-}
 bool Player::HasLost()
 {
-    assert(p_Other != nullptr);
     return ((HP <= 0) && (p_Other->HP > 0));
 }
 void Player::Idle()
@@ -127,7 +121,6 @@ void Player::Idle()
 }
 void Player::hit(int damage)
 {
-    assert(p_Other != nullptr);
     p_Other->HP -= damage;
     sf::Vector2f newsize(p_Other->HPbar.getSize().x - (damage * 2), p_Other->HPbar.getSize().y);
     p_Other->HPbar.setSize(newsize);
@@ -202,8 +195,6 @@ void Player::StartJump()
 }
 sf::Vector2f Player::GetOtherPlayerPosition()
 {
-    std::clog<<this<<" "<<p_Other<<std::endl;
-    assert(p_Other != nullptr);
     return p_Other->getPosition();
 }
 sf::Vector2f Player::GetAccel()

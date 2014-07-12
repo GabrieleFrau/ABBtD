@@ -33,7 +33,6 @@ public:
     bool IsPunching();
     void Punch();
     void StartJump();
-    Player* GetPointer();
     void UpdateAndAnimate(sf::Time& delta);
     bool HasLost();
     void HitUpperBody();
@@ -49,7 +48,7 @@ private:
     int HP;
     bool punched;
     sf::Vector2f GetOtherPlayerPosition();
-    Player* p_Other;
+    std::shared_ptr<Player> p_Other;
     thor::FrameAnimation a_WalkPointingLeft;
     thor::FrameAnimation a_WalkPointingRight;
     thor::FrameAnimation a_PunchRight;
